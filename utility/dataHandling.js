@@ -1616,10 +1616,10 @@ function html2PDF (actNum, memNum, pageData_original, con, callback){
                 (async () => {
                     i++;
                     // Create a browser instance
-                    const browser = await puppeteer.launch({
-                      headless : "new",
-                      ignoreDefaultArgs: ['--disable-extensions']
-                    });
+					const browser = await puppeteer.launch({
+					  args: ["--no-sandbox", "--disable-setuid-sandbox"],
+					  headless: true
+					});
                 
                     // Create a new page
                     const page = await browser.newPage();

@@ -84,12 +84,15 @@ var con;
 //Connect to Database and listen on port 8081
 app.listen(8081, function(err) {
     if (err) throw err
+    
     con = mysql.createConnection({
-            host: "localhost",
-            user: 'root',
-            password: 'fur124365',
-            database: 'PMSA_DB',
-        })
+      host: process.env.MYSQLHOST,
+      user: process.env.MYSQLUSER,
+      password: process.env.MYSQLPASSWORD,
+      database: process.env.MYSQLDATABASE,
+      port: process.env.MYSQLPORT
+    });
+
         //TODO: check that user is in databse
     con.connect(function(err) {
         if (err) {

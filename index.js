@@ -1,3 +1,4 @@
+process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
 const mysql = require('mysql')
 const express = require('express')
 const path = require('path')

@@ -1,3 +1,4 @@
+process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
 const { query } = require("express")
 const subProcess = require('child_process')
 const puppeteer = require('puppeteer');

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<!-- BlackList -->
+<!-- will also need to add an edit button -->
+
+<head>
+    <link rel="stylesheet" href=../../public/styles/common.css>
+    <style>
+        body {
+            background-color: rgb(10, 10, 10);
+            color: aliceblue;
+        }
+        
+        #blackListTable {
+            border-style: solid;
+            margin: 5%;
+            box-shadow: 10px 0px 10px 5px #0887f0, 0 0 10px 5px #0887f0, 0 0 10px 5px #0887f0, 0 0 10px 5px #0887f0;
+            animation: radiation 10s infinite;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #listHeader {
+            display: flex;
+            text-align: center;
+            border-bottom: solid 2px;
+            font-size: 20px
+        }
+        
+        #listHeader>* {
+            padding: 5px 5px;
+        }
+        
+        .listRow {
+            display: flex;
+            text-align: center;
+            border-bottom: solid 2px;
+            font-size: 16px;
+        }
+        
+        .listRow>* {
+            padding: 5px 5px;
+        }
+        
+        @keyframes radiation {
+            0% {
+                box-shadow: 10px 0px 10px 5px #0887f0, 0 0 10px 5px #0887f0, 0 0 10px 5px #0887f0, 0 0 10px 5px #0887f0;
+            }
+            50% {
+                box-shadow: 10px 0px 10px 5px #f00836, 0 0 10px 5px #f00836, 0 0 10px 5px #f00836, 0 0 10px 5px #f00836;
+            }
+            100% {
+                box-shadow: 10px 0px 10px 5px #0887f0, 0 0 10px 5px #0887f0, 0 0 10px 5px #0887f0, 0 0 10px 5px #0887f0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id = "navigationBar">
+        <form class=PMSA_Logo method="post" action="/mainPage" onclick="this.submit()">
+            <img src="../public/images/PMSA_Web_Logo.png" >
+        </form>
+        <div style="width: 3%;"></div>
+        <div class="borderLine"></div>
+        <form method="post" action="/allMembers">
+            <input type="hidden" name="memNum" value=0>
+            <input type="hidden" name="direction" value="next">
+            <input type="hidden" name="filterLC" value="<%=userLC%>">
+            <input type="hidden" name="chosenLC" value="<%=userLC%>">
+            <button class="width:100%" type="submit">
+            All Members
+            </button>
+        </form>
+        <div class="borderLine"></div>
+
+        <!-- all trainers -->
+        <form method="post" action="/allTrainers">
+             <input type="hidden" name="memNum" value=0>
+            <input type="hidden" name="direction" value="next">
+            <input type="hidden" name="filterLC" value="<%=userLC%>">
+            <input type="hidden" name="chosenLC" value="<%=userLC%>">
+            <button class="" type="submit">
+            All Trainers
+        </button>
+        </form>
+        <div class="borderLine"></div>
+        <!-- all activities -->
+        <form method="post" action="/allActivities">
+            <input type="hidden" name="filter" value="<%=userLC%>">
+            <button class="" type="submit">
+            All Activities
+        </button>
+        </form>
+        <div class="borderLine"></div>
+
+        <form method="post" action="/blackList">
+            <button class="" type="submit">
+            Black List
+        </button>
+        </form>
+        <div class="borderLine"></div>
+        <div style="margin-left: auto; " class="borderLine"></div>
+        <form method="get" action="/login">
+            <button type="submit">
+            Logout
+        </button>
+        </form>
+        <div  style="margin-right: 2%;" class="borderLine"></div>
+    </div>
+
+
+    <div class="fullbox">
+        <h1 style="width:100%"> BlackList</h1>
+        <div id="blackListTable">
+            <div id="listHeader">
+                <div style="width:25%; text-align:center; border-right:solid 2px">
+                    Member Name
+                </div>
+                <div style="width:25%; text-align:center; border-right:solid 2px">
+                    Blacklist Status
+                </div>
+                <div style="width:50%; text-align:center">
+                    Reason for Blacklisting
+                </div>
+            </div>
+            <% blackLisitngs.filter((element) => element.BlackListStatus != "clear").forEach((item) => {%>
+                <div class="listRow">
+                    <div style="width:25%; text-align:center; border-right:solid 2px">
+                        <%=item.Name%>
+                    </div>
+                    <div style="width:25%; text-align:center; border-right:solid 2px">
+                        <%=item.BlackListStatus%>
+                    </div>
+                    <div style="width:50%; text-align:center">
+                        <%=item.BlackListDescription%>
+                    </div>
+                </div>
+                <%})%>
+
+        </div>
+    </div>
+    <script>
+        const hiddenUserIn = document.createElement('input');
+        hiddenUserIn.setAttribute('type', 'hidden');
+        hiddenUserIn.setAttribute('name', "username");
+        hiddenUserIn.setAttribute('value', "<%=user%>");
+
+        const hiddenLCIn = document.createElement('input');
+        hiddenLCIn.setAttribute('type', 'hidden');
+        hiddenLCIn.setAttribute('name', "localCommittee");
+        hiddenLCIn.setAttribute('value', "<%=userLC%>");
+
+        const hiddenCipherIn = document.createElement('input');
+        hiddenCipherIn.setAttribute('type', 'hidden');
+        hiddenCipherIn.setAttribute('name', "cipher");
+        hiddenCipherIn.setAttribute('value', "<%=cipher%>");
+
+        const hiddenPositionIn = document.createElement('input');
+        hiddenPositionIn.setAttribute('type', 'hidden');
+        hiddenPositionIn.setAttribute('name', "position");
+        hiddenPositionIn.setAttribute('value', "<%=position%>");
+
+        const forms = document.forms;
+        console.log(forms)
+        for (let i = 0; i < forms.length; i++) {
+            forms[i].appendChild(document.importNode(hiddenUserIn, true))
+            forms[i].appendChild(document.importNode(hiddenLCIn, true))
+            forms[i].appendChild(document.importNode(hiddenCipherIn, true))
+            forms[i].appendChild(document.importNode(hiddenPositionIn, true))
+        }
+    </script>
+</body>
+
+</html>

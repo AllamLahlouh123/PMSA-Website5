@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html>
+<!-- TODO add all users  -->
+
+<head>
+    <link rel="stylesheet" href="../public/styles/common.css">
+    <style>
+        .blurry {
+            -webkit-filter: blur(5px);
+            -moz-filter: blur(5px);
+            -o-filter: blur(5px);
+            -ms-filter: blur(5px);
+            filter: blur(5px);
+            background-color: #ccc;
+        }
+        
+        .blurr h1 {
+            margin-left: 30px;
+        }
+        
+        .show {
+            display: block;
+        }
+        
+        .form-container {
+            margin: 20% auto;
+            display: block;
+            width: 500px;
+            text-align: center;
+        }
+        
+        .form-container input {
+            margin-bottom: 10px;
+        }
+        
+        .center {
+            margin: auto;
+            width: 60%;
+            border: 3px solid #73AD21;
+            padding: 10px;
+        }
+        
+        .drop-shadow {
+            position: relative;
+            padding: 1em;
+            background: #FFF;
+            -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+            -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+        }
+        
+        .drop-shadow:before,
+        .drop-shadow:after {
+            content: "";
+            position: absolute;
+            z-index: -2;
+        }
+        
+        .curved-hz-2:before {
+            top: 0;
+            bottom: 0;
+            left: 10px;
+            right: 10px;
+            -moz-border-radius: 100px / 10px;
+            border-radius: 100px / 10px;
+        }
+        
+        .curved:before {
+            top: 10px;
+            bottom: 10px;
+            left: 0;
+            right: 50%;
+            -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+            -moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+            -moz-border-radius: 10px / 100px;
+            border-radius: 10px / 100px;
+        }
+        
+        .watermarked {
+            position: relative;
+            opacity: 0.7;
+        }
+        
+        .watermarked:after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-image: url("images/cropped-Untitled-1-1.png");
+            background-size: 100px 100px;
+            background-position: 30px 30px;
+            background-repeat: no-repeat;
+        }
+        
+        .allButoon {
+            padding: 1%;
+            border: 2px solid #000000;
+            margin: 20%;
+            padding: 20px;
+            font-size: 20px;
+            width: 100%;
+            height: 100px;
+            background-color: transparent;
+        }
+        
+        .zoom {
+            transition-property: box-shadow border-radius transform;
+            transition-duration: .15s;
+        }
+        
+        .zoom:hover {
+            -ms-transform: scale(1.01);
+            /* IE 9 */
+            -webkit-transform: scale(1.01);
+            /* Safari 3-8 */
+            box-shadow: 2px 2px 3px 1px rgb(5, 5, 5);
+            border-radius: 2%;
+            transform: scale(1.01);
+            cursor: pointer;
+        }
+        
+        .column {
+            display:flex;
+            float: left;
+            content: "";
+            width: 25%;
+            border: 2px solid #000000;
+            padding-top: 1%;
+            padding-bottom: 1%;
+        }
+        
+        .minicolumn {
+            float: left;
+            display: inline-block;
+            height: 100%;
+            padding: 1px;
+        }
+        
+        .row {
+            content: "";
+            clear: both;
+            position: relative;
+            width: 90%;
+            float: none;
+            margin-left: 5%;
+            margin-right: 5%;
+            height: 60%;
+            margin-bottom: 1%;
+        }
+        
+        #SecGen {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 90%;
+            margin-left: 5%;
+            height: 350px;
+            overflow-y: scroll;
+        }
+        
+        .SecGenCell {
+            border: 1px solid #ddd;
+            padding: 8px;
+            padding-top: 15px;
+            padding-top: 15px;
+            width: 33%;
+        }
+        
+        .headerCell {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #0b60af;
+            color: white;
+        }
+        
+        #headerCell {
+            border: 1px solid #ddd;
+            padding: 8px;
+            padding-top: 15px;
+            padding-top: 15px;
+        }
+        
+        #SecGen li:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        #SecGen li:hover {
+            background-color: #ddd;
+        }
+        
+        #leftbox {
+            display: inline-block;
+            position: relative;
+            width: 30%;
+            margin-left: 1%;
+            margin-top: 2%;
+            min-width: max-content;
+        }
+        
+        #rightbox {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 49%;
+            margin-right: 1%;
+            margin-top: 2%;
+            min-width: max-content;
+        }
+        
+        .popUpWindow {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            background-color: whitesmoke;
+            text-align: center;
+            box-shadow: 2px 2px 3px 1px rgb(5, 5, 5);
+            width: 55%;
+            margin: 10% 22.5%;
+        }
+        
+        #newUserForm {
+            padding: 0px 30px;
+        }
+        
+        #newUserForm>div {
+            display: flex;
+            padding-bottom: 1%;
+            padding-top: 1%;
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: solid 1px #545353
+        }
+        
+        #newUserForm>div>input {
+            width: 300px;
+            margin-right: 50px;
+            margin-left: 50px;
+        }
+        
+        #newUserForm>div>div {
+            width: 400px;
+        }
+        
+        #newUserForm>div>label {
+            margin-right: 60px;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div id = "navigationBar">
+        <form class=PMSA_Logo method="post" action="/mainPage" onclick="this.submit()">
+            <img src="../public/images/PMSA_Web_Logo.png" >
+        </form>
+        <div style="width: 3%;"></div>
+        <div class="borderLine"></div>
+        <form class ="allMembersForm" method="post" action="/allMembers">
+            <input type="hidden" name="memNum" value=0>
+            <input type="hidden" name="direction" value="next">
+            <input type="hidden" name="filterLC" value="<%=userLC%>">
+            <input type="hidden" name="chosenLC" value="<%=userLC%>">
+            <button class="width:100%" type="submit">
+            All Members
+            </button>
+        </form>
+        <div class="borderLine"></div>
+
+        <!-- all trainers -->
+        <form class ="allTrainersForm" method="post" action="/allTrainers">
+             <input type="hidden" name="memNum" value=0>
+            <input type="hidden" name="direction" value="next">
+            <input type="hidden" name="filterLC" value="<%=userLC%>">
+            <input type="hidden" name="chosenLC" value="<%=userLC%>">
+            <button class="" type="submit">
+            All Trainers
+        </button>
+        </form>
+        <div class="borderLine"></div>
+        <!-- all activities -->
+        <form class="allActivitiesForm" method="post" action="/allActivities">
+            <input type="hidden" name="filter" value="<%=userLC%>">
+            <button class="" type="submit">
+            All Activities
+        </button>
+        </form>
+        <div class="borderLine"></div>
+
+        <form class="blackListForm" method="post" action="/blackList">
+            <button class="" type="submit">
+            Black List
+        </button>
+        </form>
+        <div class="borderLine"></div>
+        <div style="margin-left: auto; " class="borderLine"></div>
+        <form method="get" action="/login">
+            <button type="submit">
+            Logout
+        </button>
+        </form>
+        <div  style="margin-right: 2%;" class="borderLine"></div>
+    </div>
+    <div class="fullbox">
+        <!-- main header -->
+        <div style="display: flex; flex-direction: row">
+            <div id="leftbox">
+                <div class="line" style=" position: relative; width:max-content; ">
+                    <div style="display: inline-block; padding-right : 5% auto">
+                        <!-- title -->
+                        <h1 style="margin-right:25px">Welcome
+                            <%= user%>
+                        </h1>
+                    </div>
+                    <!-- time and date -->
+                    <div style="display: inline-block; margin-right : 5% auto; ">
+                        <text id="current_date"></text><br>
+                        <text id="current_time"></text>
+                    </div>
+                </div>
+                <br>
+
+                <!-- list of buttons -->
+                <div style="position: relative; float: left; margin-left: 10%">
+                    <!-- all members -->
+                    <form class ="allMembersForm" method="post" action="/allMembers">
+                        <input type="hidden" name="memNum" value=0>
+                        <input type="hidden" name="direction" value="next">
+                        <input type="hidden" name="filterLC" value="<%=userLC%>">
+                        <input type="hidden" name="chosenLC" value="<%=userLC%>">
+                        <button class="allButoon zoom secgen" type="submit">
+                        All Members
+                    </button>
+                    </form>
+                    <!-- all trainers -->
+                    <form class="allTrainersForm" method="post" action="/allTrainers">
+                         <input type="hidden" name="memNum" value=0>
+                        <input type="hidden" name="direction" value="next">
+                        <input type="hidden" name="filterLC" value="<%=userLC%>">
+                        <input type="hidden" name="chosenLC" value="<%=userLC%>">
+                        <button class="allButoon zoom secgen" type="submit">
+                        All Trainers
+                    </button>
+                    </form>
+                    <!-- all activities -->
+                    <form class="allActivitiesForm" method="post" action="/allActivities">
+                        <input type="hidden" name="filter" value="<%=userLC%>">
+                        <button class="allButoon zoom secgen" type="submit">
+                        All Activities
+                    </button>
+                    </form>
+
+                    <form class="blackListForm" method="post" action="/blackList">
+                        <button class="allButoon zoom secgen" type="submit">
+                        Black List
+                    </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Activities Log -->
+            <div id="rightbox">
+                <div class="line" style=" position: relative; width:60%;  margin-bottom: 2%; float: left; margin-left: 20%;">
+                    <div style="display: inline-block; padding-right : 5% auto">
+                        <!-- title -->
+                        <h1 style="margin-right:25px">
+                            Activities Log
+                        </h1>
+                    </div>
+                    <!-- time and date -->
+                    <div style="display: inline-block; margin-right : 5% auto; ">
+                        <text id="current_date"></text><br>
+                        <text id="current_time"></text>
+                    </div>
+                </div>
+
+                <ul list-style-type="none" id="SecGen">
+                    <li style="display:flex; flex-direction:row" id="header">
+                        <div class="headerCell SecGenCell">Account Name</div>
+                        <div class="headerCell SecGenCell">Last Time Logged</div>
+                        <div class="headerCell SecGenCell">Last Action</div>
+                    </li>
+
+                    <%usersLog.forEach( (element) => {%>
+                        <li style="display:flex; flex-direction:row" id="header">
+                            <div class="SecGenCell">
+                                <%=element.position%>
+                            </div>
+                            <div class="SecGenCell">
+                                <%=element.lastLogDate%>
+                            </div>
+                            <div class="SecGenCell">
+                                <%=element.lastChange%>
+                            </div>
+                        </li>
+                        <%});%>
+
+                </ul>
+
+                <div class="line" style=" position: relative; width:60%;  margin-bottom: 2%; float: left; margin-left: 20%;">
+                    <div style="display: inline-block; padding-right : 5% auto">
+                        <!-- title -->
+                        <h1 style="margin-right:25px">
+                            Current LCs terms time-span
+                        </h1>
+                    </div>
+                    <!-- time and date -->
+                    <div style="display: inline-block; margin-right : 5% auto; ">
+                        <text id="current_date"></text><br>
+                        <text id="current_time"></text>
+                    </div>
+                </div>
+                <div>
+                    <div class="row">
+                        <div class="column" style="margin-left:6.5%; margin-right: 2.5%;">
+                            <div class="minicolumn" style="border-right:1px solid #000000; width: 50% ">
+                                Nablus
+                            </div>
+                            <div class="minicolumn" style="width:auto">
+                                <%=nablusStartDate%>
+                            </div>
+                        </div>
+                        <div class="column" style="margin-left:2.5%; margin-right: 2.5%;">
+                            <div class="minicolumn" style="border-right:1px solid #000000; width: 50%">
+                                HU
+                            </div>
+                            <div class="minicolumn">
+                                <%=huStartDate%>
+                            </div>
+                        </div>
+                        <div class="column" style="margin-left:2.5%; margin-right: 6.5%;">
+                            <div class="minicolumn" style="border-right:1px solid #000000; width: 50%">
+                                Gaza
+                            </div>
+                            <div class="minicolumn">
+                                <%=gazaStartDate%>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column" style="margin-left:6.5%; margin-right: 2.5%;">
+                            <div class="minicolumn" style="border-right:1px solid #000000; width: 50%">
+                                Jerusalem
+                            </div>
+                            <div class="minicolumn" style="width:auto">
+                                <%=jerusalemStartDate%>
+                            </div>
+                        </div>
+                        <div class="column" style="margin-left:2.5%; margin-right: 2.5%;">
+                            <div class="minicolumn" style="border-right:1px solid #000000; width: 50%">
+                                PPU
+                            </div>
+                            <div class="minicolumn">
+                                <%=ppuStartDate%>
+                            </div>
+                        </div>
+                        <div class="column" style="margin-left:2.5%; margin-right: 6.5%;">
+                            <div class="minicolumn" style="border-right:1px solid #000000; width: 50%">
+                                Jenin
+                            </div>
+                            <div class="minicolumn">
+                                <%=jeninStartDate%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div  style="display:flex; flex-direction:column; width:10%; position:relative; margin-top: 5.5%">
+                <form id="resetMemForm" method="post" style="width:100%; margin-top: 40%" action="/resetMember">
+                    <button class="allButoon zoom secgen" type="button" onclick="formConfirm('resetMemForm')">Reset All Local Member</button>
+                </form>
+                <button id="registerUserBtn" class="allButoon zoom secgen" onclick="addNewUserWin()">Register New User</button>
+                <button id="deleteUserBtn"class="allButoon zoom secgen" onclick="deleteUserWin()">Delete User</button>
+            </div>
+
+        </div>
+    </div>
+    <div id="deleteUserWin" class="popUpWindow">
+        <form id="deleteUserForm" method="post" action="/deleteUser" style="display:flex; flex-direction:column">
+            <select name="userToDelete" style="width: 50%; margin: 2.5% 25%">
+                    <%usersLog.filter((item) => (item.position != "NATIONAL Secgen")).forEach( (element) => {%>
+                        <option  id = "<%=element.username%>" value = "<%=element.username%>"><%=element.position%></option>
+                    </li>
+                   <%});%>
+                </select>
+            <div style="display:flex; flex-direction:row">
+                <button style="width: 50%; margin: 2.5% 25%" type="button" onclick="formConfirm('deleteUserForm')"> Delete Member</button>
+                <button style="width: 50%; margin: 2.5% 25%" type="button" onclick="deleteUserWin();"> Cancel</button>
+            </div>
+        </form>
+    </div>
+    <div id="newUserWin" class="popUpWindow">
+        <h1>Register A New User</h1>
+        <form id= newUserForm method="post" action="registerUser">
+            <div>
+                <label style="width: 200px; ">Username</label>
+                <input type="text" maxlength="50" required name="nUsername">
+            </div>
+            <div>
+                <label style="width: 200px; ">Password</label>
+                <input type="password" maxlength="50" required id="password" name="nPassword">
+            </div>
+            <div>
+                <label style="width: 200px; ">Confirm Password</label>
+                <input type="password" maxlength="50" onpaste="return false" required id="confirm_password" name="confirmPassword">
+            </div>
+            <div>
+                <label style="width: 200px; ">Position</label>
+                <div style="display: flex; width:200px; margin:0px 100px">
+                    <label><input required type="radio" name="nPosition" value="Secgen">Secgen</label>
+                    <label><input required type="radio" name="nPosition" value="CBD">CBD</label>
+                </div>
+            </div>
+            <div>
+                <label style="width: 200px; ">Local Committee</label>
+                <div style="display: flex;">
+                    <label><input required type="radio" name="nLC" value="nablus">Nablus</label>
+                    <label><input required type="radio" name="nLC" value="jenin">Jenin</label>
+                    <label><input required type="radio" name="nLC" value="ppu">PPU</label>
+                    <label><input required type="radio" name="nLC" value="hu">HU</label>
+                    <label><input required type="radio" name="nLC" value="jerusalem">Jerusalem</label>
+                    <label><input required type="radio" name="nLC" value="gaza">Gaza</label>
+                    <label><input required type="radio" name="nLC" value="national">National</label>
+                </div>
+            </div>
+            <div style="width:40%; padding: 0% 30%">
+                <button type="button" style="margin:10px 10px" onclick="validatePassword()">Submit</button>
+                <button type="button" style="margin:10px 10px" onclick="addNewUserWin()">Cancel</button>
+            </div>
+
+
+        </form>
+    </div>
+
+    <script>
+
+
+        if ("<%=userLC%>" == "national" || "<%=position%>" == "CBD"){
+            elements = document.getElementById("resetMemForm").elements
+            for (var i = 0; i < elements.length; i++){
+                elements[i].setAttribute("disabled", "")
+            }
+        }
+        if (!("<%=userLC%>" == "national" && "<%=position%>" == "Secgen")){
+            document.getElementById("rightbox").remove();
+            document.getElementById("registerUserBtn").remove();
+            document.getElementById("deleteUserBtn").remove();
+        }
+
+        if ("<%=position%>" != "CBD" && "<%=userLC%>" != "national"){
+            formats = document.getElementsByClassName("allTrainersForm")
+            for (var j = 0; j < formats.length; j++){
+                elements = formats[j].elements
+                for (var i = 0; i < elements.length; i++){
+                    elements[i].setAttribute("disabled", "")
+                }
+            }
+        }
+
+        if ("<%=position%>" == "CBD"){
+            formats = document.getElementsByClassName("allActivitiesForm")
+            for (var j = 0; j < formats.length; j++){
+                elements = formats[j].elements
+                //for (var i = 0; i < elements.length; i++){
+                //    elements[i].setAttribute("disabled", "")
+                //}
+                if (formats[j].parentElement.id == "navigationBar"){
+                    for (var i = 0; i < elements.length; i++){
+                        formats[j].remove()
+                    }
+                }
+            }
+            
+            formats = document.getElementsByClassName("blackListForm")
+            for (var j = 0; j < formats.length; j++){
+                elements = formats[j].elements
+                for (var i = 0; i < elements.length; i++){
+                    elements[i].setAttribute("disabled", "")
+                }
+
+                if (formats[j].parentElement.id == "navigationBar"){
+                    for (var i = 0; i < elements.length; i++){
+                        formats[j].elements[i].remove()
+                    }
+                }
+            }
+        }
+            
+        
+        const hiddenUserIn = document.createElement('input');
+        hiddenUserIn.setAttribute('type', 'hidden');
+        hiddenUserIn.setAttribute('name', "username");
+        hiddenUserIn.setAttribute('value', "<%=user%>");
+
+        const hiddenLCIn = document.createElement('input');
+        hiddenLCIn.setAttribute('type', 'hidden');
+        hiddenLCIn.setAttribute('name', "localCommittee");
+        hiddenLCIn.setAttribute('value', "<%=userLC%>");
+
+        const hiddenCipherIn = document.createElement('input');
+        hiddenCipherIn.setAttribute('type', 'hidden');
+        hiddenCipherIn.setAttribute('name', "cipher");
+        hiddenCipherIn.setAttribute('value', "<%=cipher%>");
+
+        const hiddenPositionIn = document.createElement('input');
+        hiddenPositionIn.setAttribute('type', 'hidden');
+        hiddenPositionIn.setAttribute('name', "position");
+        hiddenPositionIn.setAttribute('value', "<%=position%>");
+
+        const forms = document.forms;
+        for (let i = 0; i < forms.length; i++) {
+            forms[i].appendChild(document.importNode(hiddenUserIn, true))
+            forms[i].appendChild(document.importNode(hiddenLCIn, true))
+            forms[i].appendChild(document.importNode(hiddenCipherIn, true))
+            forms[i].appendChild(document.importNode(hiddenPositionIn, true))
+        }
+
+
+        var cur_time = new Date();
+        document.getElementById("current_time").innerText = `${cur_time.getHours()}:${(cur_time.getMinutes() < 10)? ("0"+cur_time.getMinutes()) : cur_time.getMinutes()}`
+        document.getElementById("current_date").innerText = `${cur_time.getFullYear()}/${(cur_time.getMonth()+1<10)?("0"+cur_time.getMonth()+1):cur_time.getMonth()+1}/${(cur_time.getDate()<10)?("0"+cur_time.getDate()):(cur_time.getDate())}`
+
+        var intervalId = setInterval(function() {
+            var cur_time = new Date();
+            document.getElementById("current_time").innerText = `${cur_time.getHours()}:${(cur_time.getMinutes() < 10)? ("0"+cur_time.getMinutes()) : cur_time.getMinutes()}`
+            document.getElementById("current_date").innerText = `${cur_time.getFullYear()}/${(cur_time.getMonth()+1<10)?("0"+cur_time.getMonth()+1):cur_time.getMonth()+1}/${(cur_time.getDate()<10)?("0"+cur_time.getDate()):(cur_time.getDate())}`
+        }, 1000);
+
+        function filterSelection(c) {
+            const collection = document.getElementsByClassName("filterDiv");
+            for (let i = 0; i < collection.length; i++) {
+                if (collection[i].className.indexOf(c) > -1)
+                    collection[i].style.display = "block";
+            }
+        }
+
+        var password = document.getElementById("password"),
+            confirm_password = document.getElementById("confirm_password");
+
+        function validatePassword() {
+            if (password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+            } else {
+                confirm_password.setCustomValidity('');
+                myForm = document.getElementById('newUserForm')
+
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+                    console.log(`Status: ${this.status}:: ${this.responseText}`)
+                    alert(`Status: ${this.status}:: ${this.responseText}`)
+                }
+                console.log(myForm.action)
+                xhr.open("POST", `${myForm.action}`)
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                let request = ""
+                inputs = myForm.getElementsByTagName("input")
+                for (let i = 0; i < inputs.length; i++) {
+                    if (inputs[i].type == "radio") {
+                        if (inputs[i].checked)
+                            request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                    } else {
+                        request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                    }
+                }
+                request = request.slice(0, -1)
+                console.log(request)
+                xhr.send(request)
+            }
+        }
+
+        function formConfirm(form_id) {
+            myForm = document.getElementById(form_id)
+            if (window.confirm('are you sure you want to do this?')) {
+                if (window.confirm('are you absolutely sure you want to do this? this is IRREVERSIBLE')) {
+                    const xhr = new XMLHttpRequest();
+                    xhr.onload = function() {
+                        console.log(`Status: ${this.status}:: ${this.responseText}`)
+                        alert(`Status: ${this.status}:: ${this.responseText}`)
+                    }
+                    xhr.open("POST", `${myForm.action}`)
+                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                    let request = ""
+                    inputs = myForm.elements
+                    for (let i = 0; i < inputs.length; i++) {
+                        if (inputs[i].type == "radio") {
+                            if (inputs[i].checked)
+                                request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                        } else {
+                            request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                        }
+                    }
+                    request = request.slice(0, -1)
+                    if (form_id == "deleteUserForm") {
+                        request.split('&').forEach(row => {
+                            array = row.split('=')
+                            if (array[0] == "userToDelete") {
+                                document.getElementById(array[array.length - 1]).remove()
+                            }
+                        })
+                    }
+                    console.log(request)
+                    xhr.send(request)
+                }
+            }
+        }
+        flag = 0;
+
+        function addNewUserWin() {
+            if (flag == 0) {
+                console.log(document.getElementById("newUserWin").style.display = "none")
+                flag++;
+            }
+
+            if (document.getElementById("newUserWin").style.display == "none") {
+                document.getElementById("newUserWin").style.display = "flex"
+                document.getElementsByClassName("fullbox")[0].classList.add("blurry")
+            } else {
+                document.getElementById("newUserWin").style.display = "none"
+                document.getElementsByClassName("fullbox")[0].classList.remove("blurry")
+
+            }
+
+        }
+
+        function deleteUserWin() {
+            if (flag == 0) {
+                console.log(document.getElementById("deleteUserWin").style.display = "none")
+                flag++;
+            }
+
+            if (document.getElementById("deleteUserWin").style.display == "none") {
+                document.getElementById("deleteUserWin").style.display = "flex"
+                document.getElementsByClassName("fullbox")[0].classList.add("blurry")
+            } else {
+                document.getElementById("deleteUserWin").style.display = "none"
+                document.getElementsByClassName("fullbox")[0].classList.remove("blurry")
+
+            }
+
+        }
+
+        function removeOption(element_id) {
+            document.getElementById(element_id).remove()
+        }
+    </script>
+
+
+</body>

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html>
+<!-- TODO add search -->
+
+<head>
+    <link rel="stylesheet" href=../../public/styles/common.css>
+    <style>
+        .fullbox {
+            background-color: transparent;
+            border-style: solid;
+            border-color: #0887f0;
+            border-width: 1px;
+            height: 800px;
+            min-width: max-content;
+            min-height: max-content;
+            width: 94%;
+            padding-bottom: 3%;
+            margin-left: 1%;
+            margin-right: 3%;
+            margin-top: 4%;
+            box-shadow: 5px 5px 5px #0887f0;
+            position: absolute;
+            float: left;
+            scale: 0.9;
+            overflow-y: scroll;
+        }
+        
+        #boxesSec {
+            margin-top: 5%;
+            height: 70%;
+            align-items: center;
+            position: relative;
+        }
+        
+        #nationalBtn {
+            float: left;
+            display: inline-block;
+            margin-left: 15%;
+            margin-right: 10%;
+            padding: 40px;
+            text-align: center;
+            font-size: 30px;
+            border-style: solid;
+            border-color: #000000;
+            background-color: transparent;
+            transition-property: box-shadow border-radius transform;
+            transition-duration: .5s;
+            cursor: pointer;
+        }
+        
+        #nationalBtn:hover {
+            box-shadow: 2px 2px 3px 1px rgb(5, 5, 5);
+            border-radius: 2%;
+            transform: scale(1.01);
+        }
+        
+        #boxesTable {
+            float: right;
+            margin-right: 25%;
+            width: 25%;
+            min-width: max-content;
+            display: inline-block;
+            border-collapse: collapse;
+            border-style: solid;
+            border-color: black;
+            height: 122px;
+            align-items: center;
+            font-size: large;
+            position: relative;
+        }
+        
+        #boxesTable td {
+            position: relative;
+            text-align: center;
+            border-style: solid;
+            border-width: 2px;
+            font-size: 22px;
+            width: 10%;
+            transition-property: box-shadow border-radius transform;
+            transition-duration: .5s;
+            z-index: 1;
+        }
+        
+        td:hover {
+            box-shadow: 2px 2px 3px 1px rgb(5, 5, 5);
+            border-radius: 2%;
+            transform: scale(1.1);
+            z-index: 100;
+            border-style: solid;
+        }
+        
+        #boxesTable tr {
+            min-width: max-content;
+            width: max-content;
+            min-height: max-content;
+            height: max-content;
+            z-index: 1;
+        }
+        
+        #personalInfo {
+            display: grid;
+            grid-template-columns: 33% 33% 33%;
+            grid-template-rows: auto;
+            grid-template-areas: "header header header" "menu main main" "menu main main" "menu main main" "menu main main";
+        }
+        
+        #personalInfo>div {
+            text-align: center;
+            font-size: 20px;
+        }
+        
+        .localbox:hover {
+            box-shadow: 2px 2px 3px 1px rgb(5, 5, 5);
+            border-radius: 2%;
+            transform: scale(1.01);
+        }
+        
+        .cyclePartBtn {
+            padding: 10%;
+            width: 60%;
+            margin-top: 1%;
+            background-color: transparent;
+            border-style: solid;
+            border-color: #000000;
+            transition-duration: 0.25s;
+        }
+        
+        .cyclePartBtn:hover {
+            -ms-transform: scale(1.01);
+            /* IE 9 */
+            -webkit-transform: scale(1.01);
+            /* Safari 3-8 */
+            box-shadow: 2px 2px 3px 1px rgb(5, 5, 5);
+            border-radius: 2%;
+            transform: scale(1.01);
+            cursor: pointer;
+        }
+        
+        .updateMemberWindow {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            background: whitesmoke;
+            box-shadow: 2px 2px 0px 2px #4e4e4e;
+            width: 99%;
+            margin: 0.5%;
+            margin-bottom: 1%;
+            height: 98%;
+            overflow-y: scroll;
+            z-index: 101;
+        }
+        
+        #newMemberForm>* {
+            padding-bottom: .7%;
+            padding-top: .7%;
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: solid 1px #545353
+        }
+        
+        #editMemberForm>* {
+            padding-bottom: .7%;
+            padding-top: .7%;
+            padding-left: 5px;
+            padding-right: 5px;
+            border-bottom: solid 1px #545353
+        }
+        
+        #searchlist>*:not(#exception) :hover {
+            background-color: #848484;
+            cursor: pointer;
+        }
+        
+        #names>div {
+            height: 40px;
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+        
+        .localbutton {
+            background-color: white;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id = "navigationBar">
+        <form class=PMSA_Logo method="post" action="/mainPage" onclick="this.submit()">
+            <img src="../public/images/PMSA_Web_Logo.png" >
+        </form>
+        <div style="width: 3%;"></div>
+        <div class="borderLine"></div>
+        <form class ="allMembersForm" method="post" action="/allMembers">
+            <input type="hidden" name="direction" value="next">
+            <input type="hidden" name="filterLC" value="<%=userLC%>">
+            <input type="hidden" name="chosenLC" value="<%=userLC%>">
+            <button class="width:100%" type="submit">
+            All Members
+            </button>
+        </form>
+        <div class="borderLine"></div>
+
+        <!-- all trainers -->
+        <form class ="allTrainersForm" method="post" action="/allTrainers">
+            <input type="hidden" name="direction" value="next">
+            <input type="hidden" name="filterLC" value="<%=userLC%>">
+            <input type="hidden" name="chosenLC" value="<%=userLC%>">
+            <button class="" type="submit">
+            All Trainers
+        </button>
+        </form>
+        <div class="borderLine"></div>
+        <!-- all activities -->
+        <form class="allActivitiesForm" method="post" action="/allActivities">
+            <input type="hidden" name="filter" value="<%=userLC%>">
+            <button class="" type="submit">
+            All Activities
+        </button>
+        </form>
+        <div class="borderLine"></div>
+
+        <form class="blackListForm" method="post" action="/blackList">
+            <button class="" type="submit">
+            Black List
+        </button>
+        </form>
+        <div class="borderLine"></div>
+        <div style="margin-left: auto; " class="borderLine"></div>
+        <form method="get" action="/login">
+            <button type="submit">
+            Logout
+        </button>
+        </form>
+        <div  style="margin-right: 2%;" class="borderLine"></div>
+    </div>
+
+    <div class="fullbox" style="display: flex; flex-direction: column;">
+        <div class="updateMemberWindow" id="searchWindow">
+            <div style="display: flex; flex-direction:column; padding:5%">
+                <div style="float:left; display:flex; flex-direction:row; margin:1% 0%;">
+                    <form id = "searchMemeberForm"method="post" action="/searchTrainer">
+                        <label style="margin:1% 1%">
+                                Search: 
+                            </label>
+
+                        <input style="margin:1% 1%" placeholder="Member Name" name="memberLike" value="" >
+
+                        <button type="button" style="margin:1% 1%;" onclick="submitSearch('searchMemeberForm')"> submit</button>
+                    </form>
+                </div>
+                <div style="margin:1% 0%; padding: 1% 0%; border-style:solid; display:flex; flex-direction:column;">
+                    <h1 style="border-bottom: solid black;"> Search results: </h1>
+                    <ul id="searchlist" style="list-style: none; overflow:scroll;">
+                        <li id="exception" style="width: 100%;">
+                            <div class="searchRowHeader" style="display:flex; flex-direction:row">
+                                <div style="margin:0% 5%; width:15.2px;"></div>
+                                <label style="width:42%">Member Number</label>
+                                <label style="width:42%">Member Name</label>
+                            </div>
+                        </li>
+                                               
+                        
+
+                    </ul>
+                    <div style="display: flex; flex-direction:column; width: 10%; margin-left: 5%">
+                        <button onclick="searchMemClose()" type="button"> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="editMemberWindow" class="updateMemberWindow">
+            <form id="editMemberForm" style="display: flex; flex-direction:column; width:90%; margin: 0% 5%;" method="post" action="/editTrainer">
+                <h1>Edit Member
+                    <%=uniNum%>
+                </h1>
+                <div style="display: flex; flex-direction:row; width:100%">
+                    <label style="margin-right:5%; width:10%">
+                            Trainer Status
+                        </label>
+                    <label style="width: 15%; margin:0% 5%"><input required type="radio" value="active" name="trainerStatus" id="trainerStatusEditActive">Active</label>
+                    <label style="width: 15%; margin:0% 5%"><input required type="radio" value="inactive" name="trainerStatus" id="trainerStatusEditInactive">Inactive</label>
+                </div>
+                <div style="display: flex; flex-direction:row; width:100%">
+                    <label style="margin-right:5%; width:10%">
+                           Trainer Category
+                        </label>
+                    <input required type="text" maxlength=30 style="margin: 0% 12.5%; width: 20%" placeholder="Trainer Type" name="trainerCategory" value="<%=trainerCategory%>">
+                </div>
+                <div style="display: flex; flex-direction:row; width:100%">
+                    <label style="margin-right:5%; width:10%">
+                            Graduation Activity
+                        </label>
+                    <input required type="text" maxlength=50 style="margin: 0% 12.5%; width: 20%" placeholder="Graduation Activity" name="gradActivity" value="<%=gradActivity%>">
+                </div>
+                <div style="display: flex; flex-direction:row; width:100%">
+                    <label style="margin-right:5%; width:10%">
+                            Graduation Date
+                        </label>
+                    <input required id="gradDateInput"type="date" style="margin: 0% 12.5%; width: 20%" placeholder="Graduation Activity" name="gradDate" value="<%=gradDate%>">
+                </div>
+
+
+                <div style="margin-top: 0.5%;">
+                    <button type="button" onclick="memberForm('editMemberForm')">Submit</button>
+                    <button type="button" onclick="editMemClose()"> Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+            <div class="line" style=" position: relative; width:max-content; margin-left : 3%">
+                <div style="display: inline-block; padding-right : 5% auto">
+                    <!-- title -->
+                    <h1 style="margin-right:25px">Welcome
+                        <%=user%>
+                    </h1>
+                </div>
+                <!-- time and date -->
+                <div style="display: inline-block; margin-right : 5% auto; ">
+                    <text id="current_date"></text><br>
+                    <text id="current_time"></text>
+                </div>
+            </div>
+
+
+            <div id="boxesSec">
+                <button id=nationalBtn onclick="setFilter('national')">
+                    National
+                </button>
+
+                <div style="display:flex; flex-direction:column; width:30%;  position:relative; border-style:solid">
+                    <div style="display:flex; flex-direction:row">
+                        <button id="nablusBtn" class="localbutton" onclick="setFilter('nablus')"> Nablus</button>
+                        <button id="jerusalemBtn" class="localbutton" onclick="setFilter('jerusalem')"> Jerusalem</button>
+                        <button id="gazaBtn" class="localbutton" onclick="setFilter('gaza')"> Gaza</button>
+                    </div>
+                    <div style="display:flex; flex-direction:row">
+                        <button id="ppuBtn" class="localbutton" onclick="setFilter('ppu')"> PPU</button>
+                        <button id="huBtn" class="localbutton" onclick="setFilter('hu')"> HU</button>
+                        <button id="jeninBtn" class="localbutton" onclick="setFilter('jenin')"> Jenin</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div style=" display: flex; flex-direction: row; text-align: center; margin-top: 2%;">
+                <div style="width: 50%; min-width: 920px;;display: flex; flex-direction: column; margin-right: 1%;">
+                    <div id="personalInfo">
+                        <div style="grid-area: header;">
+                            <div style="display:flex; flex-direction: row; color: rgb(0, 119, 255);">
+                                <div style="width: 33%; min-width: 33%;">
+                                </div>
+                                <div style="padding-left:6.9%;padding-right:6.9%; width: 19.2%; border-bottom: solid rgb(0, 119, 255);">
+                                    English
+                                </div>
+                                <div style="padding-left:6.9%;padding-right:6.9%; width: 19.2%;border-bottom: solid rgb(0, 119, 255);">
+                                    Arabic
+                                </div>
+                            </div>
+                        </div>
+                        <div style="grid-area: main;">
+                            <div id=names ames style="display:flex; flex-direction: column; font-size: 20px;">
+                                <div style="display: flex; flex-direction: row;">
+                                    <div id="engFname" style="padding-left: 5%; padding-right: 5%; width: 40%;">
+                                        <%=engFname%>
+                                    </div>
+                                    <div id="arabFname" style="padding-left: 5%; padding-right: 5%; width: 40%;">
+                                        <%=arabFname%>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: row;">
+                                    <div id="engFather" style="padding-left: 5%; padding-right: 5%; width: 40%;">
+                                        <%=engFather%>
+                                    </div>
+                                    <div id="arabFather" style="padding-left: 5%; padding-right: 5%; width: 40%;">
+                                        <%=arabFather%>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: row;">
+                                    <div id="engGfather" style="padding-left: 5%; padding-right: 5%; width: 40%;">
+                                        <%=engGfather%>
+                                    </div>
+                                    <div id="arabGfather" style="padding-left: 5%; padding-right: 5%; width: 40%;">
+                                        <%=arabGfather%>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: row;">
+                                    <div id="engLname" style="padding-left: 5%; padding-right: 5%; width: 40%;">
+                                        <%=engLname%>
+                                    </div>
+                                    <div id="arabLname" style="padding-left: 5%; padding-right: 5%; width: 40%;">
+                                        <%=arabLname%>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div style="grid-area: menu; display: flex; flex-direction: column; font-size: 20px;">
+                            <div style="height:40px">
+                                First Name
+                            </div>
+                            <div style="height:40px">
+                                Father Name
+                            </div>
+                            <div style="height:40px">
+                                Grandfather Name
+                            </div>
+                            <div style="height:40px">
+                                Family Name
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 1.5%;">
+                        <div style="width: 350px; text-align: center; font-size: 20px;">
+                            Phone No.
+                        </div>
+                        <div style=" width: 700px; text-align: center; font-size: 20px; display: flex; flex-direction: row;">
+                            <div id="areaCode" style="width: 15%; padding:1px; border: solid; min-width: fit-content">
+                                +
+                                <%=areaCode%>
+                            </div>
+                            <div id="phoneNo" style="margin-left: 4%;width: 80%; padding:1px; border: solid; min-width: fit-content">
+                                <%=phoneNo%>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 350px; text-align: center; font-size: 20px">
+                            Email
+                        </div>
+                        <div id="Email" style=" width: 700px; text-align: center; font-size: 20px; overflow-x:hidden">
+                            <%=email%>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 350px; text-align: center; font-size: 20px">
+                            Facebook
+                        </div>
+                        <a id="firstYear" style=" width: 700px; text-align: center; font-size: 20px; overflow-x: hidden" href="https://www.facebook.com/nooraldeen.tirhi/" target="_blank">
+                            <%=facebook%>
+                        </a>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 350px; text-align: center; font-size: 20px;">
+                            Freshmen Year
+                        </div>
+                        <div id="firstYear" style=" width: 700px; text-align: center; font-size: 20px;">
+                            <%=firstYear%>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 350px; text-align: center; font-size: 20px;">
+                            University Number
+                        </div>
+                        <div id="uniNum" style=" width: 700px; text-align: center; font-size: 20px;">
+                            <%=uniNum%>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 350px; text-align: center; font-size: 20px;">
+                            Local Committee
+                        </div>
+                        <div id="uniNum" style=" width: 700px; text-align: center; font-size: 20px;">
+                            <%=localCommittee%>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 350px; text-align: center; font-size: 20px;">
+                            Gender
+                        </div>
+                        <div id="uniNum" style=" width: 700px; text-align: center; font-size: 20px;">
+                            <%=gender%>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 350px; text-align: center; font-size: 20px;">
+                            Membership Status
+                        </div>
+                        <div id="memStatus" style=" width: 700px; text-align: center; font-size: 20px;">
+                            <%=memStatus%>
+                        </div>
+                    </div>
+                    
+                    <div style="background-color: #000000; color:white; display: flex; flex-direction: row; width: 95%; margin-left:2.5%; margin-right:2.5% ;margin-top: 0.5%;">
+                        <div style="width: 350px; text-align: center; font-size: 20px;">
+                            Blacklist Status
+                        </div>
+                        <div id="blacklistStatus" style=" width: 700px; text-align: center; font-size: 20px;">
+                            <%=blacklistStatus%>
+                        </div>
+                    </div><div>
+                        
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <h1 style="width: 100%; border-bottom:solid"> Trainer Information</h1>
+
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 33%; text-align: center; font-size: 20px;">
+                            Category
+                        </div>
+                        <div id="trainerStatus" style=" width: 67%; text-align: center; font-size: 20px;">
+                            <%=trainerCategory%>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 33%; text-align: center; font-size: 20px;">
+                            Graduation Activity
+                        </div>
+                        <div id="trainerStatus" style=" width: 67%; text-align: center; font-size: 20px;">
+                            <%=gradActivity%>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 33%; text-align: center; font-size: 20px;">
+                            Graduation Date
+                        </div>
+                        <div id="trainerStatus" style=" width: 67%; text-align: center; font-size: 20px;">
+                            <%=gradDate%>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-top: 0.5%;">
+                        <div style="width: 33%; text-align: center; font-size: 20px;">
+                            Trainer Status
+                        </div>
+                        <div id="trainerStatus" style=" width: 67%; text-align: center; font-size: 20px;">
+                            <%=trainerStatus%>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; min-width: max-content; padding-top: 1%; width : 10%; align-items:center">
+                    <form style="width:100%" method="post" action="/allTrainers">
+                        <input type="hidden" name="direction" value="next">
+                        <input type="hidden" id="chosenLCInNext"name="chosenLC" value="">
+                        <button class="cyclePartBtn" >
+                        Next
+                        </button>
+                    </form>
+
+                    <form style="width:100%" method="post" action="/allTrainers">
+                        <input type="hidden" name="direction" value="previous">
+                        <input type="hidden" id="chosenLCInPrev"name="chosenLC" value="">
+                        <button class="cyclePartBtn" >
+                        Prev
+                        </button>
+                    </form>
+
+                <button class="cyclePartBtn" onclick="searchMemPopUp()">
+                    Search
+                </button>
+                    <button class="cyclePartBtn"  id="editMemButton" onclick="editMemPopUp()">
+                    Edit
+                </button>
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+        <script>
+            if ("<%=position%>" == "CBD" ){
+            formats = document.getElementsByClassName("allActivitiesForm")
+            for (var j = 0; j < formats.length; j++){
+                elements = formats[j].elements
+                for (var i = 0; i < elements.length; i++){
+                    elements[i].setAttribute("disabled", "")
+                }
+                if (formats[j].parentElement.id == "navigationBar"){
+                    formats[j].remove()
+                }
+
+            }
+            
+            formats = document.getElementsByClassName("blackListForm")
+            for (var j = 0; j < formats.length; j++){
+                elements = formats[j].elements
+                for (var i = 0; i < elements.length; i++){
+                    elements[i].setAttribute("disabled", "")
+                }
+
+                if (formats[j].parentElement.id == "navigationBar"){
+                    for (var i = 0; i < elements.length; i++){
+                        formats[j].elements[i].remove()
+                    }
+                }
+            }
+        }
+        
+
+
+            document.getElementById('gradDateInput').value = formatDate(new Date('<%=gradDate%>'))
+
+            function padTo2Digits(num) {
+              return num.toString().padStart(2, '0');
+            }
+
+            function formatDate(date = new Date()) {
+              return [
+                date.getFullYear(),
+                padTo2Digits(date.getMonth() + 1),
+                padTo2Digits(date.getDate()),
+              ].join('-');
+            }
+            if ("<%=uniNum%>" == "0" || "<%=position%>" != "CBD"){
+                document.getElementById("editMemButton").disabled=true
+                document.getElementById("editMemButton").style.borderColor = "#6b6a6a"
+                document.getElementById("editMemButton").style.backgroundColor = "rgb(200, 200, 200)"
+            }
+            if("<%=userLC%>" != "national")
+                document.getElementById("boxesSec").style.display = "none"
+
+            document.getElementById('gradDateInput')
+            
+
+            const hiddenUserIn = document.createElement('input');
+            hiddenUserIn.setAttribute('type', 'hidden');
+            hiddenUserIn.setAttribute('name', "username");
+            hiddenUserIn.setAttribute('value', "<%=user%>");
+
+            const hiddenLCIn = document.createElement('input');
+            hiddenLCIn.setAttribute('type', 'hidden');
+            hiddenLCIn.setAttribute('name', "localCommittee");
+            hiddenLCIn.setAttribute('value', "<%=userLC%>");
+
+            const hiddenCipherIn = document.createElement('input');
+            hiddenCipherIn.setAttribute('type', 'hidden');
+            hiddenCipherIn.setAttribute('name', "cipher");
+            hiddenCipherIn.setAttribute('value', "<%=cipher%>");
+
+            const hiddenPositionIn = document.createElement('input');
+            hiddenPositionIn.setAttribute('type', 'hidden');
+            hiddenPositionIn.setAttribute('name', "position");
+            hiddenPositionIn.setAttribute('value', "<%=position%>");
+
+            const hiddenFilterLCIn = document.createElement('input');
+            hiddenFilterLCIn.setAttribute('type' , 'hidden');
+            hiddenFilterLCIn.setAttribute('name' , "filterLC");
+            hiddenFilterLCIn.setAttribute('value', "<%=localCommittee%>");
+
+            const hiddenmemNumIn = document.createElement('input');
+            hiddenmemNumIn.setAttribute('type' , 'hidden');
+            hiddenmemNumIn.setAttribute('name' , "memNum");
+            hiddenmemNumIn.setAttribute('value', "<%=uniNum%>");
+
+            console.log(hiddenFilterLCIn)
+
+            const forms = document.forms;
+            
+            console.log(forms)
+            for (let i = 0; i < forms.length; i++) {
+                forms[i].appendChild(document.importNode(hiddenUserIn, true))
+                forms[i].appendChild(document.importNode(hiddenLCIn, true))
+                forms[i].appendChild(document.importNode(hiddenCipherIn, true))
+                forms[i].appendChild(document.importNode(hiddenPositionIn, true))
+                forms[i].appendChild(document.importNode(hiddenFilterLCIn, true))
+                forms[i].appendChild(document.importNode(hiddenmemNumIn, true))
+            }
+             
+            var cur_time = new Date();
+            document.getElementById("current_time").innerText = `${cur_time.getHours()}:${(cur_time.getMinutes() < 10)? ("0"+cur_time.getMinutes()) : cur_time.getMinutes()}`
+            document.getElementById("current_date").innerText = `${cur_time.getFullYear()}/${(cur_time.getMonth()+1<10)?("0"+cur_time.getMonth()+1):cur_time.getMonth()+1}/${(cur_time.getDate()<10)?("0"+cur_time.getDate()):(cur_time.getDate())}`
+            var intervalId = setInterval(function() {
+                var cur_time = new Date();
+                document.getElementById("current_time").innerText = `${cur_time.getHours()}:${(cur_time.getMinutes() < 10)? ("0"+cur_time.getMinutes()) : cur_time.getMinutes()}`
+                document.getElementById("current_date").innerText = `${cur_time.getFullYear()}/${(cur_time.getMonth()+1<10)?("0"+cur_time.getMonth()+1):cur_time.getMonth()+1}/${(cur_time.getDate()<10)?("0"+cur_time.getDate()):(cur_time.getDate())}`
+            }, 1000);
+
+            var filterLC;
+            lcs = ['national', 'nablus', 'jerusalem', 'gaza', 'ppu', 'hu', 'jenin']
+            setFilter("<%=chosenLC%>")
+
+
+            
+
+            function setFilter(localCommittee) {
+                filterLC = localCommittee;
+                lcs.forEach((element) => {
+                    temp = document.getElementById(`${element}Btn`)
+                    temp.style.borderStyle = "none"
+                    if (element == "national")
+                        temp.style.borderStyle = "solid"
+                    temp.style.borderColor = "black"
+                    temp.style.scale = 1;
+                    temp.style.zIndex = 1;
+                })
+                lcBtn = document.getElementById(`${localCommittee}Btn`)
+                lcBtn.style.borderColor = "rgb(0, 119, 255)"
+                lcBtn.style.borderStyle = "solid"
+                lcBtn.style.scale = 1.2;
+                lcBtn.style.zIndex = 100;
+                lcBtn.style.position = "relative"
+                document.getElementById("chosenLCInNext").value = localCommittee
+                document.getElementById("chosenLCInPrev").value = localCommittee
+                document.getElementsByName("filterLC").forEach( input=>{
+                    input.value = localCommittee
+                    console.log(input.value)
+                })
+            }
+
+            let curMemNumber = Number("<%=curMemNumber%>");
+
+            const user_details = {
+                username: "<%=user%>",
+                cipher: "<%=cipher%>"
+            };
+
+            function addMemPopUp() {
+                const element = document.getElementById("newMemberWindow")
+                element.style.display = "flex"
+            }
+
+            function addMemClose() {
+                const element = document.getElementById("newMemberWindow")
+                element.style.display = "none"
+            }
+
+            const blacklistMap = new Map();
+            blacklistMap.set('clear', 0);
+            blacklistMap.set('red', 1);
+            blacklistMap.set('orange', 2);
+            blacklistMap.set('yellow', 3);
+            blacklistMap.set('blue', 4);
+            blacklistMap.set('green', 5);
+            blacklistMap.set('exchange', 6);
+
+            function editMemPopUp() {
+                const element = document.getElementById("editMemberWindow")
+                element.style.display = "flex"
+                    //set known values
+                if ("<%=trainerStatus%>" == "active") {
+                    document.getElementById("trainerStatusEditActive").setAttribute("checked", true)
+                } else {
+                    document.getElementById("trainerStatusEditInactive").setAttribute("checked", true)
+                }
+            }
+
+            checkReason()
+            function checkReason(src) {
+                if (src == "blclear") {
+                    document.getElementById('blreason').setAttribute('disabled', true)
+                    document.getElementById('blreason').removeAttribute('required')
+                } else {
+                    document.getElementById('blreason').removeAttribute('disabled')
+                    document.getElementById('blreason').setAttribute('required', true)
+                }
+            }
+
+            function editMemClose() {
+                const element = document.getElementById("editMemberWindow")
+                element.style.display = "none"
+            }
+
+
+
+            function searchMemPopUp() {
+                console.log("noor")
+                const element = document.getElementById("searchWindow")
+                element.style.display = "flex"
+                document.getElementsByClassName("fullbox")[0].classList.add("blurry")
+            }
+
+            function searchMemClose() {
+                const element = document.getElementById("searchWindow")
+                element.style.display = "none"
+                document.getElementsByClassName("fullbox")[0].classList.remove("blurry")
+            }
+
+            function submitSearch(form_id) {
+                myForm = document.getElementById(form_id)
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+                    document.body.style.cursor = "default"
+                    console.log(`Status: ${this.status}:: ${this.responseText}`)
+                    if (this.status != 200){
+                        alert(`Status: ${this.status}:: ${this.responseText}`)
+                    }else{
+                        console.log(this.responseText)
+                        results = JSON.parse(this.responseText)
+
+                        const temp = document.importNode(document.getElementById("exception"), true)
+                        document.getElementById("searchlist").innerHTML = ""
+                        document.getElementById("searchlist").append(temp)
+
+
+                        if (results.length > 0 ){
+                            results.forEach(obj => {
+                                listItem = document.createElement("li")
+                                listItem.classList.add("searchRow")
+                                    formItem = document.createElement("form")
+                                    formItem.method="post"
+                                    formItem.action="/allTrainers"
+                                    formItem.style.width = "100%"
+                                    formItem.style.display = "flex" 
+                                    formItem.style.flexDirection = "row"
+                                        inputItem1 = document.createElement("input")
+                                        inputItem1.type="hidden"
+                                        inputItem1.name="direction"
+                                        inputItem1.value="next"
+                                        formItem.appendChild(inputItem1)
+                                        inputItem2 = document.createElement("input")
+                                        inputItem2.type="hidden"
+                                        inputItem2.name="memNum"
+                                        inputItem2.value = Number(obj.memNum) - 1
+                                        inputItem3 = document.createElement("input")
+                                        inputItem3.type="hidden"
+                                        inputItem3.name="chosenLC"
+                                        inputItem3.value = "national"
+                                        formItem.appendChild(inputItem3)
+                                        formItem.appendChild(inputItem2)
+                                        buttonItem = document.createElement("button")
+                                        buttonItem.style.width = "10%"
+                                        buttonItem.style.marginRight = "15.2px"
+                                        buttonItem.innerText = "Select"
+                                        formItem.appendChild(buttonItem)
+                                        labelItem1 = document.createElement("label")
+                                        labelItem1.style.width="42%"
+                                        labelItem1.innerText = obj.memNum
+                                        formItem.appendChild(labelItem1)
+                                        labelItem2 = document.createElement("label")
+                                        labelItem2.style.width="42%"
+                                        labelItem2.innerText = obj.memName
+                                        formItem.appendChild(labelItem2)
+                                        
+                                listItem.appendChild(formItem)
+                                console.log(listItem)                                
+                                formItem.appendChild(document.importNode(hiddenUserIn, true))
+                                formItem.appendChild(document.importNode(hiddenLCIn, true))
+                                formItem.appendChild(document.importNode(hiddenCipherIn, true))
+                                formItem.appendChild(document.importNode(hiddenPositionIn, true))
+                                formItem.appendChild(document.importNode(hiddenFilterLCIn, true))
+                                console.log(formItem)
+                                document.getElementById("searchlist").append(listItem)
+           
+              
+                            })
+                        }else{
+                            element = document.createElement("div")
+                            element.classList.add("searchRow")
+                            element.innerText = "No member with a similar name was found in the currently chosen LC"
+                            document.getElementById("searchlist").append(element)
+                        }
+
+                        //<li class="searchRow">
+                        //     <div style="width: 100%; display:flex; flex-direction:row">
+                        //         <button style="width:10%; margin-right:15.2px">Select</button>
+                        //         <label style="width:42%">Member Number</label>
+                        //         <label style="width:42%">Member Name</label>
+                        //     </div>
+                        //</li>
+                        
+                    }
+                }
+                xhr.open("POST", `${myForm.action}`)
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                let request = ""
+                inputs = myForm.elements
+                for (let i = 0; i < inputs.length; i++) {
+                    if (inputs[i].type == "radio") {
+                        if (inputs[i].checked)
+                            request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                    } else {
+                        request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                    }
+                }
+                request = request.slice(0, -1)
+                console.log(request)
+                xhr.send(request)
+                document.body.style.cursor = "wait"
+            }
+
+            function memberForm(form_id){
+                const myForm = document.getElementById(form_id)
+                const xhr = new XMLHttpRequest();
+
+                xhr.onload = function (){
+                    alert(`Status: ${this.status}:: ${this.responseText}`)
+                    document.body.style.cursor = "default"
+                }
+
+                xhr.open("POST", `${myForm.action}`)
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                let request = ""
+                inputs = myForm.elements
+                for (let i = 0; i < inputs.length; i++) {
+                    if (inputs[i].type == "radio") {
+                        if (inputs[i].checked)
+                            request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                    } else {
+                        request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                    }
+                }
+                request = request.slice(0, -1)
+                console.log(request)
+                xhr.send(request)
+                document.body.style.cursor = "wait"
+            }
+
+            function deleteMemReq(form_id){
+                if (window.confirm('are you sure you want to do this?')) {
+                    if (window.confirm('are you absolutely sure you want to do this? this is IRREVERSIBLE')) {
+                        const myForm = document.getElementById(form_id)
+                        const xhr = new XMLHttpRequest();
+                        xhr.onload = function (){
+                            document.body.style.cursor = "default"
+                            alert(`Status: ${this.status}:: ${this.responseText}`)
+                        }
+                    
+                        xhr.open("POST", `${myForm.action}`)
+                        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                        let request = ""
+                        inputs = myForm.elements
+                        for (let i = 0; i < inputs.length; i++) {
+                            if (inputs[i].type == "radio") {
+                                if (inputs[i].checked)
+                                    request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                            } else {
+                                request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                            }
+                        }
+                        request = request.slice(0, -1)
+                        console.log(request)
+                
+                        xhr.send(request)
+                        document.body.style.cursor = "wait"
+                    }
+                }
+                
+            }
+        </script>
+
+</body>
+
+</html>

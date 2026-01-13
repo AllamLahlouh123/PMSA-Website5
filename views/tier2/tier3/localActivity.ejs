@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html>
+    <!--TODO add button to delete activity -->
+<head>
+    <link rel="stylesheet" href=../../../public/styles/common.css>
+    <style>
+        
+        #parentbox {
+            position: relative;
+            float: left;
+            width: 94%;
+            margin-left: 1%;
+            margin-right: 1%;
+            margin-top: 1%;
+            margin-bottom: 1%;
+            height: 98%;
+            vertical-align: middle;
+            min-height: max-content;
+            min-width: max-content;
+        }
+        
+        #parentbox>* {
+            height: 100%
+        }
+        
+        .sidebox {
+            /* border-style: solid;
+            border-color: black; */
+            min-width: min-content;
+            min-height: min-content;
+        }
+        
+        #leftbox {
+            min-width: max-content;
+            float: left;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            margin: 0px 50px;
+        }
+        
+        #leftbox>* {
+            margin: 4% 0%;
+            width: 650px;
+            float: left;
+            overflow: hidden;
+        }
+        
+        .sidebox>* {
+            margin: 1% 0%
+        }
+        
+        #rightbox {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .headerbox {
+            text-align: center;
+            border-style: solid;
+            border-color: black;
+            font-size: xx-large;
+            padding: 15px;
+            display: block;
+            width:400px;
+        }
+        
+        .participantBtn {
+            font-size: x-large;
+            border-style: solid;
+            padding: 5px;
+            background-color: transparent;
+            border-style: solid;
+            border-color: black;
+            border-width: 3px;
+            transition-duration: .5s;
+        }
+        
+        .participantBtn:hover {
+            -ms-transform: scale(1.01);
+            /* IE 9 */
+            -webkit-transform: scale(1.01);
+            /* Safari 3-8 */
+            box-shadow: 2px 2px 3px 1px rgb(5, 5, 5);
+            border-radius: 2%;
+            transform: scale(1.01);
+            cursor: pointer;
+        }
+        #addMemPopUp{
+            display:none;
+            position: absolute;
+            width: 98%;
+            height: 80%;
+            margin: 0% 1%;
+            margin-bottom: 5%;
+            min-width: max-content;
+            background-color: whitesmoke;
+            box-shadow: 2px 2px 2px 3px #4e4e4e;
+        }
+        #deleteMemPopUp{
+            display:none;
+            position: absolute;
+            width: 98%;
+            height: 80%;
+            margin: 0% 1%;
+            margin-bottom: 5%;
+            min-width: max-content;
+            background-color: whitesmoke;
+            box-shadow: 2px 2px 2px 3px #4e4e4e;
+        }
+        #confirmAddition{
+            position: absolute;
+            display: none;
+            flex-direction: row;
+            width: 100%;
+        }
+        #chooseRole{
+            position: absolute;
+            display: none;
+            flex-direction: column;
+            width: 40%;
+            height: fit-content;
+            margin: 4% 30%;
+            background-color: whitesmoke;
+            box-shadow: 2px 2px 2px 3px #4e4e4e;
+        }
+        #confirmdeletion{
+            position: absolute;
+            display: none;
+            flex-direction: row;
+            width: 100%;
+        }
+        .newActivity{
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            background: whitesmoke;
+            box-shadow: 2px 2px 0px 2px #4e4e4e;
+            width: 99%;
+            margin: 0.5%;
+            margin-bottom: 1%;
+            height: 98%;
+            z-index: 50;
+        }
+        #newActivityForm > *{
+            padding-bottom: .7%;
+            padding-top: .7%;
+            padding-left:5px;
+            padding-right:5px;
+            border-bottom: solid 1px #545353
+        }
+        .tagsContainer{
+            display:flex;
+            flex-direction:row;
+            height:fit-content
+        }
+        .tagContainer{
+            display:flex;
+            border-style:solid;
+            border-width:1px;
+        }
+        .tagButton{
+            height: fit-content;
+             border-style:none;
+             background-color:transparent
+        }
+        #chooseRoleList li{
+            display: flex;
+            flex-direction: row;
+            border-bottom: solid 1px black;
+            padding: 10px 10%;
+            width: 90%;
+        }
+        #chooseRoleList{
+            height: 400px;
+            width : 80%;
+            overflow-y: scroll;
+        }
+        #templatelistItem{
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id = "navigationBar">
+        <form class=PMSA_Logo method="post" action="/mainPage" onclick="this.submit()">
+            <img src="../../../public/images/PMSA_Web_Logo.png" >
+        </form>
+        <div style="width: 3%;"></div>
+        <div class="borderLine"></div>
+        <form class ="allMembersForm" method="post" action="/allMembers">
+            <input type="hidden" name="memNum" value=0>
+            <input type="hidden" name="direction" value="next">
+            <input type="hidden" name="filterLC" value="<%=userLC%>">
+            <input type="hidden" name="chosenLC" value="<%=userLC%>">
+            <button class="width:100%" type="submit">
+            All Members
+            </button>
+        </form>
+        <div class="borderLine"></div>
+
+        <!-- all trainers -->
+        <form class ="allTrainersForm" method="post" action="/allTrainers">
+             <input type="hidden" name="memNum" value=0>
+            <input type="hidden" name="direction" value="next">
+            <input type="hidden" name="filterLC" value="<%=userLC%>">
+            <input type="hidden" name="chosenLC" value="<%=userLC%>">
+            <button class="" type="submit">
+            All Trainers
+        </button>
+        </form>
+        <div class="borderLine"></div>
+        <!-- all activities -->
+        <form class="allActivitiesForm" method="post" action="/allActivities">
+            <input type="hidden" name="filter" value="<%=userLC%>">
+            <button class="" type="submit">
+            All Activities
+        </button>
+        </form>
+        <div class="borderLine"></div>
+
+        <form class="blackListForm" method="post" action="/blackList">
+            <button class="" type="submit">
+            Black List
+        </button>
+        </form>
+        <div class="borderLine"></div>
+        <div style="margin-left: auto; " class="borderLine"></div>
+        <form method="get" action="/login">
+            <button type="submit">
+            Logout
+        </button>
+        </form>
+        <div  style="margin-right: 2%;" class="borderLine"></div>
+    </div>
+
+    <div class="fullbox" style="justify-content: start;">
+        <div class ="newActivity" id="newActivityWindow">
+                <form id="newActivityForm" style="display: flex; flex-direction:column; width:90%; margin: 0% 5%" method="post" action="/editActivity">
+                    <h1 id="addActivityTitle"></h1>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%"> 
+                            <label style="margin-right:5%; width:10%">
+                                Activity Name
+                            </label>
+                            <input required type="text" maxlength="50" style="margin: 0% 12.5%; width: 20%" placeholder="Activity Name" name="activityName" value="<%=activityName%>">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                Activity Description
+                            </label>
+                             <textarea style="margin:0% 5%; width:50%; height:100px; resize:none"type="textarea" rows="4" cols="125" maxlength="500" id="aDescription"  name="activityDescription" placeholder="write a max of 500 character to describe the activity"><%=activityDescription%></textarea>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                Proposal Link
+                            </label>
+                            <input required type="url"  style="margin: 0% 12.5%; width: 20%" placeholder="Proposal Link" name="proposalLink" value="<%=proposalLink%>">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                Report Link
+                            </label>
+                            <input required type="url"  style="margin: 0% 12.5%; width: 20%" placeholder="Report Link" name="reportLink" value="<%=reportLink%>">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                Start Date
+                            </label>
+                            <input required type="date"  style="margin: 0% 12.5%; width: 20%" placeholder="StartDate" id="startDateInput" name="startDate" value="<%=startDate%>">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                End Date
+                            </label>
+                            <input required type="date"  style="margin: 0% 12.5%; width: 20%" placeholder="EndDate" id="endDateInput" name="endDate" value="<%=endDate%>">
+                        </div>
+                    </div>
+                    <div id = "participatingCommittees" style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            
+                            <label style="margin-right:5%; width:10%">
+                                Participating Local Committees
+                            </label>
+                            <select id="lcSelect" style="width:7%; margin-right:10%" onchange="createTag(this)">
+                                <option selected> --none-- </option>
+                            </select>
+                            <div id="participatingLcs" style="display: flex; flex-direction:row" class="tagsContainer">
+                                <input type="hidden" name="participatingLCs" value="">
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                
+                    <div style="margin-top: 0.5%;">
+                        <button type="button" onclick="formConfirm('newActivityForm')">Submit</button>
+                        <button type="button" onclick="addActivityClose()"> Cancel</button>
+                    </div>
+                   
+                </form>
+        </div>
+
+
+        <div class ="newActivity" id="newActivityWindow">
+                <form id="newActivityForm" style="display: flex; flex-direction:column; width:90%; margin: 0% 5%" method="post" action="/editActivity">
+                    <h1 id="addActivityTitle"></h1>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                Activity Name
+                            </label>
+                            <input required type="text" maxlength="50" style="margin: 0% 12.5%; width: 20%" placeholder="Activity Name" name="activityName" value="<%=activityName%>">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                Activity Description
+                            </label>
+                             <textarea style="margin:0% 5%; width:50%; height:100px; resize:none"type="textarea" rows="4" cols="125" maxlength="500" id="aDescription"  name="activityDescription" placeholder="write a max of 500 character to describe the activity"><%=activityDescription%></textarea>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                Proposal Link
+                            </label>
+                            <input required type="url"  style="margin: 0% 12.5%; width: 20%" placeholder="Proposal Link" name="proposalLink" value="<%=proposalLink%>">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                Report Link
+                            </label>
+                            <input required type="url"  style="margin: 0% 12.5%; width: 20%" placeholder="Report Link" name="reportLink" value="<%=reportLink%>">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                Start Date
+                            </label>
+                            <input required type="date"  style="margin: 0% 12.5%; width: 20%" placeholder="StartDate" id="startDateInput" name="startDate" value="<%=startDate%>">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction:row; width:100%">
+                        <div style="display: flex; flex-direction:row; width:100%">
+                            <label style="margin-right:5%; width:10%">
+                                End Date
+                            </label>
+                            <input required type="date"  style="margin: 0% 12.5%; width: 20%" placeholder="EndDate" id="endDateInput" name="endDate" value="<%=endDate%>">
+                        </div>
+                    </div>
+                                    
+                    <div style="margin-top: 0.5%;">
+                        <button type="button" onclick="formConfirm('newActivityForm')">Submit</button>
+                        <button type="button" onclick="addActivityClose()"> Cancel</button>
+                    </div>
+                   
+                </form>
+        </div>
+
+        <div style="display: block; height: max-content; width: fit-content; text-align: center; margin: 0% 2%; overflow :visible; justify-self: left;">
+            <div class="line" style="position: relative; width:100%">
+                <div style="display: inline-block; padding-right : 5% auto">
+                    <!-- title -->
+                    <h1 style="margin-right:25px">
+                        Welcome
+                        <%=user%><br>
+                    </h1>
+                </div>
+                <!-- time and date -->
+                <div style="display: inline-block; margin-right : 5% auto; ">
+                    <text id="current_date"></text><br>
+                    <text id="current_time"></text>
+                </div>
+            </div>
+            <div style="float:left">
+                <h1>
+                    <%=activityName%>:
+                        <%=activityID%>
+                </h1>
+            </div>
+        </div>
+
+        <div id="parentbox">
+            <div id=leftbox class="sidebox">
+                    <div class="headerbox" style="margin-left: 41.8px;">
+                        <%=activityName%>
+                    </div>
+
+                <div class="headerbox" style="margin-left: 41.8px;">
+                    <div style="border-bottom : solid 1px black; width:100%; font-size:medium; overflow: scroll">
+                        <%=activityDescription%>
+                    </div>
+                    <div style="font-size: large; margin-top:2%">
+                        <a href="<%=reportLink%>" target="_blank">Report Link</a>
+                    </div>
+                    <div style="font-size: large;margin-top:2%">
+                        <a href="<%=proposalLink%>" target="_blank">Proposal Link</a>
+                    </div>
+                </div>
+                <div class="headerbox" style="margin-left: 41.8px;">
+                    <%=committeeName.toUpperCase()%>
+                </div>
+                <div style="height: max-content; min-width:max-content; display:flex; flex-direction: row;">
+                    Start&ensp;<br>Date&ensp;
+                    <div class="headerbox" style="display: inline-block; margin-right: 5px;">
+                        <%=startDate%>
+                    </div>
+                    End&ensp;<br>Date&ensp;
+                    <div class="headerbox" style="display: inline-block;">
+                        <%=endDate%>
+                    </div>
+                </div>
+            </div>
+            <div id=rightbox class="sidebox">
+                <div style="width:94%;display: flex; flex-direction:row ; padding:1%">
+                    <button class="participantBtn" style="width:25%; margin-right:7.5%" onclick="addMemPopUp()">
+                        Add Participants
+                    </button>
+                    <button class="participantBtn" style="width:25%; margin-right:7.5%" onclick="deleteMemPopUp()">
+                        Delete Participants
+                    </button>
+                    <button class="participantBtn" style="width:25%; border-color: rgb(0, 119, 255); color: rgb(0, 119, 255)" onclick="addActivityWindow()">
+                        Edit Activity
+                    </button>
+                </div>
+                <div style="display: flex; flex-direction: row; border-style: solid; width: 89%; padding:5% 5% 2% 2%">
+                    <div style="width:40%; max-width: 40%;">
+                        <div class="headerbox" style=" overflow-x: hidden; max-width: 100%; font-size: x-large; max-height: 90%;">
+                            <%=participantName%>
+                        </div>
+                        <div class="headerbox" style="margin:3% 0%; overflow-x: hidden;max-width: 100%;font-size: x-large;">
+                            <%=participantLocalCommittee%>
+                        </div>
+                        <div class="headerbox" style="margin:3% 0%; overflow-x: hidden;max-width: 100%;font-size: x-large;">
+                            <%=participantYearOfStudy%>
+                        </div>
+                        <div class="headerbox" style="margin:3% 0%; overflow-x: hidden; max-width: 100%;font-size: x-large;">
+                            <%=participantPhoneNO%>
+                        </div>
+                        <div class="headerbox" style="margin:3% 0%; overflow-x: hidden;max-width: 100%;font-size: x-large;">
+                            <%=participantEmail%>
+                        </div>
+                        <div class="headerbox" style="margin:3% 0%; overflow-x: hidden;max-width: 100%;font-size: x-large;">
+                            <a href="<%=participantFacebook%>" target="_blank">Facebook Account</a>
+                        </div>
+                    </div>
+                    <div style="width: 60%; height: 90%; margin-left: 5%; border-style: solid; display: flex; flex-direction: column;">
+                        <div style="width: 80%; height: 5%;margin-left: 10%; margin-right: 10%; margin-bottom: 2%; text-align: center; border-bottom: solid black;">
+                            <h1>
+                                Activities
+                            </h1>
+                        </div>
+
+                        <div style="width: 100%; max-height: 93%;display: flex; flex-direction: row;">
+                            <div style="float:left ;margin-left: 2%; margin-right: 2%; max-width: 40%; max-height: 80%;">
+                                <h1>National</h1>
+                                <ol style="max-height: calc(15*20px); overflow-y: scroll;">
+                                    <% nationalActivites.forEach( element=> { %>
+                                        <li>
+                                            <%= element %>
+                                        </li>
+                                        <% }) %>
+                                </ol>
+
+                            </div>
+                            <div style="width:10%; background-color:  #4e4e4e;">
+                            </div>
+                            <div style="float:left ;margin-left: 2%; margin-right: 2%; max-width: 40%; max-height: 80%;">
+                                <h1>Local</h1>
+                                <ol style="max-height: calc(15*20px); overflow-y: scroll;">
+                                    <% localActivites.forEach( element=> { %>
+                                        <li>
+                                            <%= element %>
+                                        </li>
+                                        <% }) %>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div style="width:94%;display: inline-block; padding:1% ">
+                    <form method="post" action="/selectAct">
+                        <input type="hidden" name="direction" value="prev">
+                        <button class="participantBtn " style="float:left ">Previous Participant</button>
+                    </form>
+                    <form method="post" action="/selectAct">
+                        <input type="hidden" name="direction" value="next">
+                        <button class="participantBtn " style="float:right ">Next Participant</button>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+
+        <div id="addMemPopUp">
+            <form id="addSearchForm" action="/searchAddToAct" method="post">
+                <div style="display: flex; flex-direction:column; padding:5%">
+                    <div style="float:left; display:flex; flex-direction:row; margin:1% 0%;">
+                        <form method="post" action="/searchAdd">
+                            <label style="margin:1% 1%">
+                                Search: 
+                            </label>
+
+                            <input style="margin:1% 1%" placeholder="Member Name" name="memberLike" value="">
+                            <button type="button" onclick="submitSearch('addSearchForm')" style="margin:1% 1%; font-size:larger"> Submit</button>
+                        </form>
+                    </div>
+                    <div style="margin:1% 0%; padding: 1% 0%; border-style:solid; display:flex; flex-direction:column;">
+                        <h1  style="border-bottom: solid black;"> Search results: </h1>
+
+                        <form id = "searchMemeberForm" method="post" action="/searchMember">
+                            <ul id="searchlist" style="list-style: none; overflow:scroll;">
+                                <li id = exception style="border-bottom:solid 2px #4e4e4e; margin-bottom:20px">
+                                    <div style="display: flex; flex-direction:row">
+                                            <input style="margin-left:5%;" type="checkbox" onclick="toggle(this)">
+                                            <div style="width:5%">select all</div> 
+                                            <label style="width:42%; margin-left:5%">Member Number</label>
+                                            <label style="width:42%">Member Name</label>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div style="display: flex; flex-direction:column; width: 10%; margin-left: 5%">
+                                <button   type="button" onclick="confirmAddPopUp()" style="margin-bottom: 3%;"> Add Selected Mambers</button>
+                                <button   type="button" onclick="addMemPopClose()" > Cancel</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div id="deleteMemPopUp">
+            <form id="deleteSearchForm" action="/searchDeleteToAct" method="post">
+                <div style="display: flex; flex-direction:column; padding:5%">
+                    <div style="float:left; display:flex; flex-direction:row; margin:1% 0%;">
+                        <form method="post" action="/searchDelete">
+                            <label style="margin:1% 1%">
+                                Search: 
+                            </label>
+
+                            <input style="margin:1% 1%" placeholder="Member Name" name="memberLike" value="">
+                            <button type="button" onclick="submitSearchDelete('deleteSearchForm')" style="margin:1% 1%; font-size:larger"> Submit</button>
+                        </form>
+                    </div>
+                    <div style="margin:1% 0%; padding: 1% 0%; border-style:solid; display:flex; flex-direction:column;">
+                        <h1  style="border-bottom: solid black;"> Search results: </h1>
+
+                        <form id = "searchDeleteForm" method="post" action="/deleteParticipants">
+                            <ul id="searchlistDelete" style="list-style: none; overflow:scroll;">
+                                <li id = exceptionDelete style="border-bottom:solid 2px #4e4e4e; margin-bottom:20px">
+                                    <div style="display: flex; flex-direction:row">
+                                            <input style="margin-left:5%;" type="checkbox" onclick="toggle(this)">
+                                            <div style="width:5%">select all</div> 
+                                            <label style="width:42%; margin-left:5%">Member Number</label>
+                                            <label style="width:42%">Member Name</label>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div style="display: flex; flex-direction:column; width: 10%; margin-left: 5%">
+                                <button   type="button" onclick="formConfirm('searchDeleteForm')" style="margin-bottom: 3%;"> Deleted Selected Mambers</button>
+                                <button   type="button" onclick="deleteMemPopClose()" > Cancel</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div id="confirmAddition">
+            <div style="width:30%"></div>
+            <div style="width: 40%; display:block ;position: relative;background-color: whitesmoke;box-shadow: 2px 2px 2px 3px #4e4e4e;">
+                <h1 style="padding:05px 20px; margin: 5px; ">All selected members have been added</h1>
+                <button onclick="confirmAddPopclose()" style="padding:05px 20px; margin: 5px"> OK</button>
+            </div>
+            <div style="width:30%"></div>
+        </div>
+
+
+        <div id="chooseRole">
+            <form id=addParticipants style="display: flex; flex-direction: column; margin:0" method="post" action="/addParticipants">
+                <h1 style="padding:05px 20px; margin: 5px; border-bottom: solid 2px black">Choose Role</h1>
+                <ul id="chooseRoleList"> 
+                </ul>
+                <button style="width:30%; margin: .5% 35%" type="button" onclick="formConfirm('addParticipants')">Submit</button>
+                <button style="width:30%; margin: .5% 35%" type="button" onclick="document.getElementById('chooseRole').style.display='none'">Cancel</button>
+                
+            </form>
+        </div>
+        <div id="confirmdeletion">
+            <div style="width:30%"></div>
+            <div style="width: 40%; display:block ;position: relative;background-color: whitesmoke;box-shadow: 2px 2px 2px 3px #4e4e4e;">
+                <h1 style="padding:05px 20px; margin: 5px; ">All selected members have been deleted</h1>
+                <button onclick="confirmDelPopclose()" style="padding:05px 20px; margin: 5px"> OK</button>
+            </div>
+            <div style="width:30%"></div>
+        </div>    
+    </div>
+
+    <li id="templatelistItem" style="display: none; flex-direction:row">
+        <input style="margin-left:5%;" name="addMemCb" type="checkbox" >
+        <div style="width: 5%;"></div>
+        <label style="width:42%; margin-left:5%">Member Number</label>
+        <label style="width:42%">Member Name</label>
+        <input type="hidden" name="memNum">
+    </li>
+
+    <li id="templateRoleItem" style="display:none;">
+        <input style="display:none;" name="uniNum" value="0">
+        <input style="padding: 3px 2px; background-color:whitesmoke; width:50%" type="text" name="name" readonly value="NoorAdin Tirhi">
+        <div style="border-style:solid; border-width:1px; padding: 3px; width:40%"> Role : <input style="padding: 3px 2px;" type="text" name="roles" value="Participant"></div>
+    </li>
+    
+
+    <script>
+        document.getElementById('startDateInput').value = formatDate(new Date('<%=startDate%>'))
+        document.getElementById('endDateInput').value = formatDate(new Date('<%=endDate%>'))
+
+        function padTo2Digits(num) {
+          return num.toString().padStart(2, '0');
+        }
+
+        function formatDate(date = new Date()) {
+          return [
+            date.getFullYear(),
+            padTo2Digits(date.getMonth() + 1),
+            padTo2Digits(date.getDate()),
+          ].join('-');
+        }
+
+
+        console.log(document.getElementById("templatelistItem").children[2].innerText)
+        var cur_time = new Date();
+        document.getElementById("current_time").innerText = `${cur_time.getHours()}:${(cur_time.getMinutes() < 10)? ("0 "+cur_time.getMinutes()) : cur_time.getMinutes()}`
+        document.getElementById("current_date").innerText = `${cur_time.getFullYear()}/${(cur_time.getMonth()+1<10)?("0 "+cur_time.getMonth()+1):cur_time.getMonth()+1}/${(cur_time.getDate()<10)?("0 "+cur_time.getDate()):(cur_time.getDate())}`
+        var intervalId = setInterval(function() {
+            var cur_time = new Date();
+            document.getElementById("current_time").innerText = `${cur_time.getHours()}:${(cur_time.getMinutes() < 10)? ("0 "+cur_time.getMinutes()) : cur_time.getMinutes()}`
+            document.getElementById("current_date").innerText = `${cur_time.getFullYear()}/${(cur_time.getMonth()+1<10)?("0 "+cur_time.getMonth()+1):cur_time.getMonth()+1}/${(cur_time.getDate()<10)?("0 "+cur_time.getDate()):(cur_time.getDate())}`
+        }, 1000);
+
+        const hiddenUserIn = document.createElement('input');
+        hiddenUserIn.setAttribute('type', 'hidden');
+        hiddenUserIn.setAttribute('name', "username");
+        hiddenUserIn.setAttribute('value',"<%=user%>");
+
+        const hiddenLCIn = document.createElement('input');
+        hiddenLCIn.setAttribute('type', 'hidden');
+        hiddenLCIn.setAttribute('name', "localCommittee");
+        hiddenLCIn.setAttribute('value',"<%=userLC%>");
+
+        const hiddenCipherIn = document.createElement('input');
+        hiddenCipherIn.setAttribute('type', 'hidden');
+        hiddenCipherIn.setAttribute('name', "cipher");
+        hiddenCipherIn.setAttribute('value',"<%=cipher%>");
+
+        const hiddenPositionIn = document.createElement('input');
+        hiddenPositionIn.setAttribute('type', 'hidden');
+        hiddenPositionIn.setAttribute('name', "position");
+        hiddenPositionIn.setAttribute('value',"<%=position%>");
+
+        const hiddenActivityiNum = document.createElement('input');
+        hiddenActivityiNum.setAttribute('type', 'hidden');
+        hiddenActivityiNum.setAttribute('name', "actNum");
+        hiddenActivityiNum.setAttribute('value',"<%=activityID%>");
+
+        const hiddenMemNum = document.createElement('input');
+        hiddenMemNum.setAttribute('type', 'hidden');
+        hiddenMemNum.setAttribute('name', "currentMemNum");
+        hiddenMemNum.setAttribute('value', "<%=particiapntNumber%>");
+
+        const forms = document.forms;
+        console.log(forms)
+        for (let i = 0; i <forms.length; i++){
+            forms[i].appendChild(document.importNode(hiddenUserIn, true))
+            forms[i].appendChild(document.importNode(hiddenLCIn, true))
+            forms[i].appendChild(document.importNode(hiddenCipherIn, true))
+            forms[i].appendChild(document.importNode(hiddenPositionIn, true))
+            forms[i].appendChild(document.importNode(hiddenActivityiNum, true))
+            forms[i].appendChild(document.importNode(hiddenMemNum, true))
+        }
+
+        const tagList = []
+        const allLCs = ['Jerusalem', 'Nablus', 'Jenin', 'PPU', 'HU', 'Gaza', 'CB', 'General']
+                
+
+        function createTag(LC){
+            LCname = LC.value;
+            if (LCname != "--none--"){
+                console.log("selected " + LCname)
+            }
+            let node = document.getElementById(`${LCname}opt`)
+            if (typeof(node) != 'undefined' && node != null)
+            {
+                node.remove();
+            }
+            
+            lcTag = document.createElement("div")
+            lcTag.classList.add('tagContainer')
+            lcTag.setAttribute('id', `${LCname}tag`)
+
+            lcButton=document.createElement("button")
+            lcButton.classList.add('tagButton')
+            lcButton.setAttribute("type", "button")
+            lcButton.setAttribute("value", LCname)
+            lcButton.setAttribute("onClick","removeTag(this.value)")
+            
+            lcXimg = document.createElement("img")
+            lcXimg.setAttribute("width", "10px")
+            lcXimg.setAttribute("height", "10px")
+            lcXimg.setAttribute("src", "../../../public/images/x_transparent.jpeg")
+            
+            lcButton.appendChild(lcXimg)
+
+            lclabel = document.createElement("label")
+            lclabel.innerHTML = LCname[0].toUpperCase() + LCname.slice(1)
+
+            lcTag.appendChild(lcButton)
+            lcTag.appendChild(lclabel)
+
+            document.getElementById("participatingLcs").appendChild(lcTag)
+
+
+        }
+        function removeTag(src){
+            console.log(src)
+            let node = document.getElementById(`${src}tag`);
+            if (typeof(node) != 'undefined' && node != null)
+            {
+                node.remove();
+            }
+            let option = document.createElement("option")
+            option.id = `${src}opt`
+            option.text = src
+            option.value = src
+            option.onselect = "createTag(value)"
+            document.getElementById("lcSelect").add(option)
+        }
+
+
+        //enable and disable add meembers pop-up
+        function addMemPopUp(){
+            const element = document.getElementById("addMemPopUp")
+            element.style.display = "block"
+        }
+        function addMemPopClose(){
+            const element = document.getElementById("addMemPopUp")
+            element.style.display = "none"
+        }
+        function confirmAddPopUp(){
+            const element = document.getElementById("chooseRole")
+            console.log(element.style.display)
+            element.style.display = "flex"
+            document.getElementById("chooseRoleList").innerHTML = ""
+            listItems = document.getElementById("searchlist").children
+            for(let i = 1; i < listItems.length; i++){
+                properties = listItems[i].children
+                if (properties[0].checked){
+                    temp = document.importNode(document.getElementById("templateRoleItem"),true)
+                    temp.style.display = "flex"
+                    temp.children[0].value = properties[2].innerText
+                    temp.children[1].value = properties[3].innerText
+                    console.log(temp)
+                    document.getElementById("chooseRoleList").append(temp)
+                }
+            } 
+        }
+        function confirmAddPopclose(){
+            const element = document.getElementById("chooseRole")
+            console.log(element.style.display)
+            element.style.display = "none"
+        }
+        
+        function formConfirm(form_id) {
+            myForm = document.getElementById(form_id)
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                console.log(`Status: ${this.status}:: ${this.responseText}`)
+                alert(`Status: ${this.status}:: ${this.responseText}`)
+                if (form_id == "addParticipants")
+                    submitSearch('addSearchForm')
+                else if (form_id == 'searchDeleteForm' )
+                    submitSearchDelete('deleteSearchForm')
+            }   
+            xhr.open("POST", `${myForm.action}`)
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            let request = ""
+            inputs = myForm.elements
+            for (let i = 0; i < inputs.length; i++) {
+                if (inputs[i].type == "checkbox") {
+                    if (inputs[i].checked)
+                        request = request + inputs[i].name + "=" + "on" + "&"
+                    else
+                        request = request + inputs[i].name + "=" + "off" + "&"
+                } else {
+                    request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                }
+            }
+            request = request.slice(0, -1)
+            if (form_id == "deleteUserForm") {
+                request.split('&').forEach(row => {
+                    array = row.split('=')
+                    if (array[0] == "userToDelete") {
+                        document.getElementById(array[array.length - 1]).remove()
+                    }
+                })
+            }
+            console.log(request)
+            xhr.send(request)
+        }
+
+        function deleteMemPopUp(){
+            const element = document.getElementById("deleteMemPopUp")
+            element.style.display = "block"
+        }
+
+        function deleteMemPopClose(){
+            const element = document.getElementById("deleteMemPopUp")
+            element.style.display = "none"
+        }
+        function confirmDelPopUp(){
+            const element = document.getElementById("confirmDeletion")
+            element.style.display = "flex"
+        }
+        function confirmDelPopclose(){
+            const element = document.getElementById("confirmDeletion")
+            element.style.display = "none"
+        }
+
+        //select all
+        function toggle(source) {
+            checkboxes = document.getElementsByName("addMemCb");
+            for(var i=0, n=checkboxes.length;i<n;i++) {
+              checkboxes[i].checked = source.checked;
+            }
+        }
+
+        function addActivityWindow(){
+            let properString;
+            committee = "<%=committeeName%>"
+            if( committee == "General"){
+                properString = committee.charAt(0).toUpperCase() + committee.slice(1);
+            }else{
+                properString = committee.toUpperCase();
+            }
+            document.getElementById("addActivityTitle").innerHTML = `Add ${properString} Activity`
+
+            document.getElementById("newActivityWindow").style.display = "flex"
+        }
+
+        function addActivityClose(){
+            document.getElementById("newActivityWindow").style.display = "none"
+        }
+
+        function submitSearch(form_id) {
+            myForm = document.getElementById(form_id)
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                document.body.style.cursor = "default"
+                console.log(`Status: ${this.status}:: ${this.responseText}`)
+                if (this.status != 200){
+                    alert(`Status: ${this.status}:: ${this.responseText}`)
+                    return
+                }
+                 console.log(this.responseText)
+                 results = JSON.parse(this.responseText)
+
+                const temp = document.importNode(document.getElementById("exception"), true)
+                document.getElementById("searchlist").innerHTML = ""
+                document.getElementById("searchlist").append(temp)
+                
+                if (results.length > 0 ){
+                    results.forEach(obj => {
+                        listItem = document.createElement("li")
+                        listItem = document.importNode(document.getElementById("templatelistItem"), true)
+                        listItem.style.display = "flex"
+                        listItem.children[2].innerText = obj.memNum
+                        listItem.children[3].innerText = obj.memName
+                        listItem.children[4].value = obj.memNum
+                        document.getElementById("searchlist").append(listItem)
+                    })
+                }else{
+                    element = document.createElement("div")
+                    element.classList.add("searchRow")
+                    element.innerText = "No member with a similar name was found in the currently chosen LC"
+                    document.getElementById("searchlist").append(element)
+                }
+                
+            }
+            xhr.open("POST", `${myForm.action}`)
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            let request = ""
+            inputs = myForm.elements
+            for (let i = 0; i < inputs.length; i++) {
+                if (inputs[i].type == "radio") {
+                    if (inputs[i].checked)
+                        request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                } else {
+                    request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                }
+            }
+            request = request.slice(0, -1)
+            console.log(request)
+            xhr.send(request)
+            document.body.style.cursor = "wait"
+        }
+
+        function submitSearchDelete(form_id) {
+            myForm = document.getElementById(form_id)
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                document.body.style.cursor = "default"
+                console.log(`Status: ${this.status}:: ${this.responseText}`)
+                if (this.status != 200){
+                    alert(`Status: ${this.status}:: ${this.responseText}`)
+                    return
+                }
+                 console.log(this.responseText)
+                 results = JSON.parse(this.responseText)
+
+                const temp = document.importNode(document.getElementById("exceptionDelete"), true)
+                document.getElementById("searchlistDelete").innerHTML = ""
+                document.getElementById("searchlistDelete").append(temp)
+                
+                if (results.length > 0 ){
+                    results.forEach(obj => {
+                        listItem = document.createElement("li")
+                        listItem = document.importNode(document.getElementById("templatelistItem"), true)
+                        listItem.style.display = "flex"
+                        listItem.children[2].innerText = obj.memNum
+                        listItem.children[3].innerText = obj.memName
+                        listItem.children[4].value = obj.memNum
+                        document.getElementById("searchlistDelete").append(listItem)
+                    })
+                }else{
+                    element = document.createElement("div")
+                    element.classList.add("searchRow")
+                    element.innerText = "No member with a similar name was found in the currently chosen LC"
+                    document.getElementById("searchlistDelete").append(element)
+                }
+                
+            }
+            xhr.open("POST", `${myForm.action}`)
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            let request = ""
+            inputs = myForm.elements
+            for (let i = 0; i < inputs.length; i++) {
+                if (inputs[i].type == "radio") {
+                    if (inputs[i].checked)
+                        request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                } else {
+                    request = request + inputs[i].name + "=" + inputs[i].value + "&"
+                }
+            }
+            request = request.slice(0, -1)
+            console.log(request)
+            xhr.send(request)
+            document.body.style.cursor = "wait"
+        }
+
+
+    </script>
+</body>
+
+</html>
